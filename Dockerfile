@@ -12,7 +12,7 @@ RUN mkdir -p /output/usr/bin
 RUN mkdir -p /output/usr/share/doc/xltui
 RUN mkdir -p /output/DEBIAN
 
-COPY ${XLTUI_RELEASE}/* /output/usr/bin/
+COPY xltui /output/usr/bin/
 COPY output/DEBIAN/control /output/DEBIAN/
 COPY output/copyright /output/usr/share/doc/xltui/
 COPY output/changelog.Debian /output/usr/share/doc/xltui/
