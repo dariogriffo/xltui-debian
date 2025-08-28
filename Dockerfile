@@ -7,6 +7,7 @@ ARG BUILD_VERSION
 ARG FULL_VERSION
 ARG ARCH
 ARG XLTUI_RELEASE
+ARG LIBICU_VERSION
 
 RUN mkdir -p /output/usr/bin
 RUN mkdir -p /output/usr/share/doc/xltui
@@ -24,5 +25,6 @@ RUN sed -i "s/DIST/$DEBIAN_DIST/" /output/DEBIAN/control
 RUN sed -i "s/xltui_VERSION/$xltui_VERSION/" /output/DEBIAN/control
 RUN sed -i "s/BUILD_VERSION/$BUILD_VERSION/" /output/DEBIAN/control
 RUN sed -i "s/SUPPORTED_ARCHITECTURES/$ARCH/" /output/DEBIAN/control
+RUN sed -i "s/LIBICU_VERSION/$LIBICU_VERSION/" /output/DEBIAN/control
 
 RUN dpkg-deb --build /output /xltui_${FULL_VERSION}.deb

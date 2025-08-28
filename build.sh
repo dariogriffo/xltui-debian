@@ -30,6 +30,7 @@ get_xltui_release() {
 build_architecture() {
     local build_arch=$1
     local xltui_release
+    local libicu_version
     
     xltui_release=$(get_xltui_release "$build_arch")
     if [ -z "$xltui_release" ]; then
@@ -61,6 +62,13 @@ build_architecture() {
     declare -a arr=("bookworm" "trixie" "forky" "sid")
     
     for dist in "${arr[@]}"; do
+      
+        declare libicu_version="libicu76"
+        
+        if [ "$dist" = "bookworm" ]; then
+            libicu_version="libicu72"
+        fi
+          
         FULL_VERSION="$xltui_VERSION-${BUILD_VERSION}+${dist}_${build_arch}"
         echo "  Building $FULL_VERSION"
         
@@ -70,6 +78,7 @@ build_architecture() {
             --build-arg BUILD_VERSION="$BUILD_VERSION" \
             --build-arg FULL_VERSION="$FULL_VERSION" \
             --build-arg ARCH="$build_arch" \
+            --build-arg LIBICU_VERSION="$libicu_version" \
             --build-arg XLTUI_RELEASE="$xltui_release"; then
             echo "❌ Failed to build Docker image for $dist on $build_arch"
             return 1
