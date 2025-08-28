@@ -1,0 +1,9 @@
+Section: utils
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Homepage: https://github.com/PDMLab/xltui
+Package: xltui
+Version: xltui_VERSION-BUILD_VERSION+DIST
+Architecture: SUPPORTED_ARCHITECTURES
+Description: minimal Terminal UI for Excel files written in .NET.
+
