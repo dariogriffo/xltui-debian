@@ -1,0 +1,19 @@
+Source: xltui
+Section: utils
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Build-Depends: debhelper-compat (= 13), wget, ca-certificates
+Standards-Version: 4.6.2
+Homepage: https://github.com/PDMLab/xltui
+Rules-Requires-Root: no
+
+Package: xltui
+Architecture: amd64 arm64
+Depends: ${misc:Depends}, libc6 (>= 2.17), libgcc-s1, libstdc++6 (>= 5), zlib1g, libicu78 | libicu76 | libicu74 | libicu72 | libicu70
+Description: minimal Terminal UI for Excel files
+ xltui is a minimal terminal UI for Excel (.xlsx) files written in .NET.
+ It renders a sheet as a table or a tree, can filter columns and group
+ rows, and can emit a sheet as JSON.
+ .
+ This package ships upstream's prebuilt self-contained binary, which loads
+ whichever ICU library (libicu70 to libicu78) the system provides.

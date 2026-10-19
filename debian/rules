@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+XLTUI_VERSION := $(shell dpkg-parsechangelog -S Version | sed 's/[-~].*//')
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+
+override_dh_auto_build:
+	@arch="$(DEB_HOST_ARCH)"; \
+	case "$$arch" in \
+		amd64) XLTUI_RELEASE="xltui-v$(XLTUI_VERSION)-linux-x64" ;; \
+		arm64) XLTUI_RELEASE="xltui-v$(XLTUI_VERSION)-linux-arm64" ;; \
+		*) echo "Unsupported architecture: $$arch"; exit 1 ;; \
+	esac; \
+	echo "Downloading $$XLTUI_RELEASE..."; \
+	wget -q "https://github.com/PDMLab/xltui/releases/download/v$(XLTUI_VERSION)/$$XLTUI_RELEASE.tar.gz"; \
+	mkdir -p "$$XLTUI_RELEASE"; \
+	tar -xf "$$XLTUI_RELEASE.tar.gz" -C "$$XLTUI_RELEASE"; \
+	rm -f "$$XLTUI_RELEASE.tar.gz"; \
+	echo "$$XLTUI_RELEASE" > .xltui_release_name
+
+override_dh_auto_install:
+	@XLTUI_RELEASE=$$(cat .xltui_release_name); \
+	install -D -m 755 "$$XLTUI_RELEASE/xltui" debian/xltui/usr/bin/xltui
+
+override_dh_auto_test:
+
+override_dh_auto_clean:
+	@if [ -f .xltui_release_name ]; then \
+		XLTUI_RELEASE=$$(cat .xltui_release_name); \
+		rm -rf "$$XLTUI_RELEASE" .xltui_release_name || true; \
+	fi
+
+# The .NET single-file bundle must not be stripped: the managed payload is
+# appended to the ELF and stripping would cut it off.
+override_dh_strip:
+
+override_dh_shlibdeps:

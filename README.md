@@ -17,7 +17,7 @@
 # xltui for Debian
 
 This repository contains build scripts to produce the _unofficial_ Debian packages
-(.deb) for [xltui](https://github.com/PDMLab/xltui/) hosted at [debian.griffo.io](https://debian.griffo.io)
+(.deb) for [xltui](https://github.com/PDMLab/xltui/) hosted at [deb.griffo.io](https://deb.griffo.io)
 
 Currently supported Debian distros are:
 - Bookworm (v12)
@@ -25,11 +25,20 @@ Currently supported Debian distros are:
 - Forky (v14)
 - Sid (testing)
 
+Currently supported Ubuntu distros are:
+- Jammy (22.04)
+- Noble (24.04)
+- Questing (25.10)
+- Resolute (26.04)
+
+One package per architecture serves every suite: xltui loads whichever ICU
+library the system ships (libicu70 to libicu78).
+
 Thanks to @ranjithrajv
 
 Supported architectures:
-- amd64 (x86_64) - All distributions
-- arm64 (aarch64) - All distributions
+- amd64 (x86_64)
+- arm64 (aarch64)
 
 This is an unofficial community project to provide a package that's easy to
 install on Debian. If you're looking for the xltui source code, see
@@ -39,21 +48,27 @@ install on Debian. If you're looking for the xltui source code, see
 
 ### The Debian way
 
+> ⚠️ **apt access requires a yearly subscription**
+> ([deb.griffo.io](https://deb.griffo.io)). To use this tool for free, download
+> the .deb from the [Releases](https://github.com/dariogriffo/xltui-debian/releases) page
+> and install it manually (see below).
+
 ```sh
-curl -sS https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/debian.griffo.io.gpg
-echo "deb https://debian.griffo.io/apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/debian.griffo.io.list
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://deb.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc | sudo gpg --dearmor --yes -o /etc/apt/keyrings/deb.griffo.io.gpg
+echo "deb [signed-by=/etc/apt/keyrings/deb.griffo.io.gpg] https://deb.griffo.io/apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/deb.griffo.io.list
 sudo apt update
 sudo apt install -y xltui
 ```
 
 ### Manual Installation
 
-1. Download the .deb package for your Debian version available on
+1. Download the .deb package for your architecture available on
    the [Releases](https://github.com/dariogriffo/xltui-debian/releases) page.
 2. Install the downloaded .deb package.
 
 ```sh
-sudo dpkg -i <filename>.deb
+sudo apt install ./<filename>.deb
 ```
 ## Updating
 
@@ -64,13 +79,13 @@ To update to a new version, just follow any of the installation methods above. T
 ### Build for single architecture
 ```sh
 ./build.sh <xltui_version> <build_version> <architecture>
-# Example: ./build.sh 0.8.11 1 arm64
+# Example: ./build.sh 0.0.3 1 arm64
 ```
 
 ### Build for all architectures
 ```sh
 ./build.sh <xltui_version> <build_version> all
-# Example: ./build.sh 0.8.11 1 all
+# Example: ./build.sh 0.0.3 1 all
 ```
 
 ## Roadmap
